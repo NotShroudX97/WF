@@ -25,7 +25,7 @@ jobs:
            sudo add-apt-repository ppa:deadsnakes/ppa
            sudo apt install python3.9
            sudo rm -rf /usr/bin/python
-           sudo if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/python3 /usr/bin/python; fi 
+           if sudo [ ! -e /usr/bin/python ]; then sudo ln -sf /usr/bin/python3 /usr/bin/python; fi 
            sudo git config --global user.email ${GitHubMail}
            sudo git config --global user.name ${GitHubName}
            sudo git config --global credential.helper store
