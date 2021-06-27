@@ -8,32 +8,65 @@ on:
     
 env:
   GitHubMail: "iam.pro2@outlook.com"
-  GitHubName: "ProgrammingError" 
+  GitHubName: "ProgrammingError"
+  PIP_NO_CACHE_DIR: 1
+  LANG: "C.UTF-8"
+  GOOGLE_CHROME_DRIVER: "/usr/bin/chromedriver"
+  GOOGLE_CHROME_BIN: "/usr/bin/google-chrome-stable"
 jobs:
   build:
     runs-on: ubuntu-18.04
 
     steps:
-       - name: Checkout
-         uses: actions/checkout@main
-
-       - name: Set Git Configs & Secrets
+       - name: Setup
          run: |
            git config --global user.email ${GitHubMail}
            git config --global user.name ${GitHubName}
            git config --global credential.helper store
            echo "https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
+           git clone -b alpha https://github.com/iam-pro/USERGE-X.git /app/
+           cd /app/
+           sed -i.bak 's/us-west-2\.ec2\.//' /etc/apt/sources.list
+           audo apt -qq update && apt -qq upgrade -y && \
+           apt -qq install -y --no-install-recommends \
+           apt-utils \
+           gnupg2 \
+           wget \
+           unzip \
+           procps \
+           tree
+           mkdir -p /tmp/ && \
+           cd /tmp/ && \
+           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+           dpkg -i ./google-chrome-stable_current_amd64.deb; apt -fqqy install && \
+           rm ./google-chrome-stable_current_amd64.deb
+           mkdir -p /tmp/ && \
+           cd /tmp/ && \
+           wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip && \
+           unzip /tmp/chromedriver.zip chromedriver -d /usr/bin/ && \
+           rm /tmp/chromedriver.zip
+           apt -qq update && apt -qq install -y --no-install-recommends \
+           gcc python3-dev zlib1g-dev \
+           apt-transport-https \
+           build-essential coreutils jq pv \
+           ffmpeg mediainfo \
+           neofetch \
+           p7zip-full \
+           libfreetype6-dev libjpeg-dev libpng-dev libgif-dev libwebp-dev && \
+           rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp/*
+           pip install -U setuptools wheel && \
+           pip install --no-cache-dir -r requirements.txt
        - name: cloning repo
          continue-on-error: false
          run: |
-           git clone -b hooman https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com/${{ secrets.CREDS }} userge
+           git clone -b hooman https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com/${{ secrets.CREDS }} usergecreds
        - name: Running Userge
          timeout-minutes: 350
          continue-on-error: true
          run: |
-           cd userge
-           docker-compose up -d
-           docker-compose logs -f
+           cp usergecreds/ /app/
+           rm -rf usergecreds
+           bash ./run
        - name: Loop workflow
          continue-on-error: true
          run: |
