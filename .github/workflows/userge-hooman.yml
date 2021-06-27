@@ -72,7 +72,7 @@ jobs:
          timeout-minutes: 350
          continue-on-error: true
          run: |
-           sudo cp -r usergecreds/ /app/
+           sudo cp -r usergecreds/config.env /app/config.env
            ls
            cd /app/
            sudo rm -rf usergecreds
