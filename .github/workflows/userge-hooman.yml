@@ -27,9 +27,9 @@ jobs:
            sudo apt install python3.9
            sudo rm -rf /usr/bin/python
            if sudo [ ! -e /usr/bin/python ]; then sudo ln -sf /usr/bin/python3 /usr/bin/python; fi 
-           sudo git config --global user.email ${GitHubMail}
-           sudo git config --global user.name ${GitHubName}
-           sudo git config --global credential.helper store
+           git config --global user.email ${GitHubMail}
+           git config --global user.name ${GitHubName}
+           git config --global credential.helper store
            sudo echo "https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
            sudo git clone -b alpha https://github.com/iam-pro/USERGE-X.git /app/
            cd /app/
@@ -72,7 +72,7 @@ jobs:
          timeout-minutes: 350
          continue-on-error: true
          run: |
-           sudo cp usergecreds/ /app/
+           sudo cp -r usergecreds/ /app/
            sudo rm -rf usergecreds
            sudo bash ./run
        - name: Loop workflow
