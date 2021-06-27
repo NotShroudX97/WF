@@ -52,7 +52,7 @@ jobs:
            sudo wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip && \
            sudo unzip /tmp/chromedriver.zip chromedriver -d /usr/bin/ && \
            sudo rm /tmp/chromedriver.zip
-           sudo apt -qq update && apt -qq install -y --no-install-recommends \
+           sudo apt -qq update && sudo apt -qq install -y --no-install-recommends \
            gcc python3-dev zlib1g-dev \
            apt-transport-https \
            build-essential coreutils jq pv \
@@ -61,6 +61,7 @@ jobs:
            p7zip-full \
            libfreetype6-dev libjpeg-dev libpng-dev libgif-dev libwebp-dev && \
            sudo rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp/*
+           cd /app/
            sudo pip3 install -U setuptools wheel && \
            sudo pip3 install --no-cache-dir -r requirements.txt
        - name: cloning repo
