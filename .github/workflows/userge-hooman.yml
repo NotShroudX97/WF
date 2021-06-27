@@ -73,6 +73,8 @@ jobs:
          continue-on-error: true
          run: |
            sudo cp -r usergecreds/ /app/
+           ls
+           cd /app/
            sudo rm -rf usergecreds
            sudo bash ./run
        - name: Loop workflow
