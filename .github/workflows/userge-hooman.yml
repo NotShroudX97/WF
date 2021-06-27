@@ -24,34 +24,34 @@ jobs:
            sudo apt install software-properties-common
            sudo add-apt-repository ppa:deadsnakes/ppa
            sudo apt install python3.9
-           rm -rf /usr/bin/python
-           if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/python3 /usr/bin/python; fi 
-           git config --global user.email ${GitHubMail}
-           git config --global user.name ${GitHubName}
-           git config --global credential.helper store
-           echo "https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
-           git clone -b alpha https://github.com/iam-pro/USERGE-X.git /app/
-           cd /app/
-           sed -i.bak 's/us-west-2\.ec2\.//' /etc/apt/sources.list
-           audo apt -qq update && apt -qq upgrade -y && \
-           apt -qq install -y --no-install-recommends \
+           sudo rm -rf /usr/bin/python
+           sudo if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/python3 /usr/bin/python; fi 
+           sudo git config --global user.email ${GitHubMail}
+           sudo git config --global user.name ${GitHubName}
+           sudo git config --global credential.helper store
+           sudo echo "https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
+           sudo git clone -b alpha https://github.com/iam-pro/USERGE-X.git /app/
+           sudo cd /app/
+           sudo sed -i.bak 's/us-west-2\.ec2\.//' /etc/apt/sources.list
+           sudo apt -qq update && apt -qq upgrade -y && \
+           sudo apt -qq install -y --no-install-recommends \
            apt-utils \
            gnupg2 \
            wget \
            unzip \
            procps \
            tree
-           mkdir -p /tmp/ && \
-           cd /tmp/ && \
-           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-           dpkg -i ./google-chrome-stable_current_amd64.deb; apt -fqqy install && \
-           rm ./google-chrome-stable_current_amd64.deb
-           mkdir -p /tmp/ && \
-           cd /tmp/ && \
-           wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip && \
-           unzip /tmp/chromedriver.zip chromedriver -d /usr/bin/ && \
-           rm /tmp/chromedriver.zip
-           apt -qq update && apt -qq install -y --no-install-recommends \
+           sudo mkdir -p /tmp/ && \
+           sudo cd /tmp/ && \
+           sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+           sudo dpkg -i ./google-chrome-stable_current_amd64.deb; apt -fqqy install && \
+           sudo rm ./google-chrome-stable_current_amd64.deb
+           sudo mkdir -p /tmp/ && \
+           sudo cd /tmp/ && \
+           sudo wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip && \
+           sudo unzip /tmp/chromedriver.zip chromedriver -d /usr/bin/ && \
+           sudo rm /tmp/chromedriver.zip
+           sudo apt -qq update && apt -qq install -y --no-install-recommends \
            gcc python3-dev zlib1g-dev \
            apt-transport-https \
            build-essential coreutils jq pv \
@@ -59,20 +59,20 @@ jobs:
            neofetch \
            p7zip-full \
            libfreetype6-dev libjpeg-dev libpng-dev libgif-dev libwebp-dev && \
-           rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp/*
-           pip install -U setuptools wheel && \
-           pip install --no-cache-dir -r requirements.txt
+           sudo rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp/*
+           sudo pip3 install -U setuptools wheel && \
+           sudo pip3 install --no-cache-dir -r requirements.txt
        - name: cloning repo
          continue-on-error: false
          run: |
-           git clone -b hooman https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com/${{ secrets.CREDS }} usergecreds
+           sudo git clone -b hooman https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com/${{ secrets.CREDS }} usergecreds
        - name: Running Userge
          timeout-minutes: 350
          continue-on-error: true
          run: |
-           cp usergecreds/ /app/
-           rm -rf usergecreds
-           bash ./run
+           sudo cp usergecreds/ /app/
+           sudo rm -rf usergecreds
+           sudo bash ./run
        - name: Loop workflow
          continue-on-error: true
          run: |
